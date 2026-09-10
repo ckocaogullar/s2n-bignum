@@ -1021,6 +1021,13 @@ extern void mldsa_ntt(int32_t a[256], const int32_t zetas[624]);
 /* Input a[256] (signed 32-bit words); output a[256] (signed 32-bit words) */
 extern void mldsa_nttunpack(int32_t a[256]);
 
+/* Uniform rejection sampling for ML-DSA: extract 23-bit coefficients from */
+/* 3-byte-packed input, keeping only those strictly less than q = 8380417. */
+/* Returns the number of accepted coefficients (at most 256). */
+/* Inputs buf[840] (uint8_t), table[256] (uint64_t lookup table); */
+/* output r[256] (int32_t). */
+extern uint32_t mldsa_rej_uniform_VARIABLE_TIME_x86(int32_t r[256], const uint8_t buf[840], const uint64_t table[256]);
+
 /* Pointwise multiplication of polynomials in NTT domain (Montgomery form) for ML-DSA */
 /* Inputs a[256], b[256] (signed 32-bit words); output r[256] (signed 32-bit words) */
 extern void mldsa_pointwise(int32_t r[256], const int32_t a[256], const int32_t b[256]);
@@ -1055,6 +1062,27 @@ extern void mldsa_pointwise_acc_l7_x86(int32_t c[256], const int32_t a[1792], co
 /* Conditional addition of Q to polynomial coefficients for ML-DSA */
 /* Input a[256] (signed 32-bit words); output a[256] (signed 32-bit words) */
 extern void mldsa_caddq(int32_t a[256]);
+
+/* Infinity-norm check of polynomial coefficients for ML-DSA */
+/* Returns 1 if any coefficient has absolute value >= bound, 0 otherwise */
+/* Input a[256] (signed 32-bit words), bound (unsigned 32-bit) */
+extern uint64_t mldsa_chknorm(const int32_t a[256], uint64_t bound);
+
+/* Coefficient decomposition for ML-DSA (GAMMA2 = (Q-1)/32, parameter sets 65/87) */
+/* Input a0[256] (signed 32-bit words); outputs a1[256] (high parts) and a0[256] (low parts) */
+extern void mldsa_decompose_32(int32_t a1[256], int32_t a0[256]);
+
+/* Coefficient decomposition for ML-DSA (GAMMA2 = (Q-1)/88, parameter set 44) */
+/* Input a0[256] (signed 32-bit words); outputs a1[256] (high parts) and a0[256] (low parts) */
+extern void mldsa_decompose_88(int32_t a1[256], int32_t a0[256]);
+
+/* Unpack packed z polynomial for ML-DSA (GAMMA1 = 2^17, parameter set 44) */
+/* Inputs b[576], t[64] (bytes); output r[256] (signed 32-bit words) */
+extern void mldsa_polyz_unpack_17_arm(int32_t r[256], const uint8_t b[576], const uint8_t t[64]);
+
+/* Unpack packed z polynomial for ML-DSA (GAMMA1 = 2^19, parameter sets 65/87) */
+/* Inputs b[640], t[64] (bytes); output r[256] (signed 32-bit words) */
+extern void mldsa_polyz_unpack_19_arm(int32_t r[256], const uint8_t b[640], const uint8_t t[64]);
 
 /* Canonical reduction of polynomial coefficients for ML-DSA */
 /* Result is centered, -6283009 <= r <= 6283008, and congruent mod 8380417 */

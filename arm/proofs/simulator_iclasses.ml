@@ -295,6 +295,15 @@ let iclasses =
   (*** SMLAL2 ***)
   "01001110xx1xxxxx100000xxxxxxxxxx";
 
+  (*** SMLAL / SMLAL2 (by element) ***)
+  "0x001111xxxxxxxx0010x0xxxxxxxxxx";
+
+  (*** UMULL / UMULL2 (by element) ***)
+  "0x101111xxxxxxxx1010x0xxxxxxxxxx";
+
+  (*** UMLSL / UMLSL2 (by element) ***)
+  "0x101111xxxxxxxx0110x0xxxxxxxxxx";
+
   (*** SMLSL ***)
   "00001110xx1xxxxx101000xxxxxxxxxx";
 
@@ -559,6 +568,12 @@ let check_insns () =
 
     (*** st1 (2 registers, Post-immediate offset) 128-bit ***)
     "01001100100111111010xxxxxxxxxxxx";
+
+    (*** ld1 (2 registers, no offset) 128-bit ***)
+    "01001100010000001010xxxxxxxxxxxx";
+
+    (*** st1 (2 registers, no offset) 128-bit ***)
+    "01001100000000001010xxxxxxxxxxxx";
 
     (*** ld2 (2 register, Post-immediate offset) ***)
     "0x001100110111111000xxxxxxxxxxxx";
